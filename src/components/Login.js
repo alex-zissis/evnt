@@ -7,8 +7,13 @@ import {
     Text,
     StatusBar,
     TextInput,
-    TouchableHighlight
+    TouchableHighlight,
+    Dimensions
 } from 'react-native';
+
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
+const highlight = 'orange';
 
 class Login extends React.Component {
     state = {
@@ -18,13 +23,16 @@ class Login extends React.Component {
 
     render() {
         return (
-            <SafeAreaView>
+            <SafeAreaView style={styles.container}>
                 <View>
-                    <Text>What is your email?</Text>
+                    <Text style={styles.title}>
+                        Enter your <Text style={{ color: highlight }}>email</Text>
+                    </Text>
                 </View>
 
-                <View>
+                <View style={styles.body}>
                     <TextInput
+                        style={styles.input}
                         onChangeText={(email) => this.validateEmail({ email })}
                         value={this.state.email}
                         autoCompleteType='email'
@@ -32,20 +40,23 @@ class Login extends React.Component {
                         keyboardType='email-address'
                         textContentType='emailAddress'
                         autoCapitalize='none'
+                        placeholder='user@example.com'
                     ></TextInput>
-                    <Text>
-                        {this.state.validEmail === true && this.state.email !== '' ? '' : 'Enter a valid email address'}
-                    </Text>
+
                     <TouchableHighlight
-                        style={this.state.validEmail ? { opacity: 1 } : { opacity: .2 }}
+                        style={this.state.validEmail ? { opacity: 1 } : { opacity: .4 }}
                         onPress={() => {
                             if (this.state.validEmail) {
                                 console.log('move on');
                             }
                         }}
                     >
-                        <Text>Click Time</Text>
+                        <Text style={styles.button}>Done</Text>
                     </TouchableHighlight>
+
+                    <Text>
+                        {this.state.validEmail === true && this.state.email !== '' ? '' : 'Enter a valid email address'}
+                    </Text>
                 </View>
             </SafeAreaView>
         )
@@ -60,13 +71,44 @@ class Login extends React.Component {
         } else {
             this.setState({ 'validEmail': false });
         }
-
-        console.log(this.state.validEmail);
     }
 }
 
 const styles = StyleSheet.create({
-
+    container: {
+        flex: 1,
+        backgroundColor: '#f1f1f1'
+    },
+    body: {
+        paddingTop: screenHeight / 16,
+        flex: 1,
+        // justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        marginTop: screenHeight / 8,
+        paddingLeft: screenWidth * .05,
+        paddingRight: screenWidth * .05,
+        fontSize: 60,
+        fontWeight: 'bold',
+        color: '#00000f'
+    },
+    input: {
+        fontSize: 25,
+        width: screenWidth * .8,
+        textAlign: 'center'
+    },
+    button: {
+        display: 'flex',
+        marginTop: 15,
+        padding: 10,
+        fontSize: 20,
+        backgroundColor: highlight,
+        color: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 100
+    }
 });
 
 export default Login;
