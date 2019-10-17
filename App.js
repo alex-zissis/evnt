@@ -16,13 +16,13 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
+const MainNavigator = createStackNavigator({
+  Home: { screen: HomeScreen },
+  Profile: { screen: ProfileScreen },
+});
 
 import Login from './src/components/Login';
 
