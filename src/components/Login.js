@@ -96,7 +96,10 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 25,
         width: screenWidth * .8,
-        textAlign: 'center'
+        textAlign: 'center',
+        borderColor: '#e3e3e3',
+        borderWidth: 2,
+        borderRadius: 10
     },
     button: {
         display: 'flex',
