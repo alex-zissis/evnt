@@ -29,6 +29,28 @@ class Home extends React.Component {
                         Welcome to <Text style={{ color: highlight }}>Evnt</Text>
                     </Text>
                 </View>
+                <View style={styles.buttonContainer}>
+                    <TouchableHighlight>
+                        <Text style={styles.button}>
+                            Hello
+                        </Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight>
+                        <Text style={[styles.button, {backgroundColor: "lightgreen"}]}>
+                            Hello
+                        </Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight>
+                        <Text style={[styles.button, {backgroundColor: "lightblue"}]}>
+                            Hello
+                        </Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight>
+                        <Text style={[styles.button, {backgroundColor: "pink"}]}>
+                            Hello
+                        </Text>
+                    </TouchableHighlight>
+                </View>
             </SafeAreaView>
         )
     }
@@ -37,7 +59,8 @@ class Home extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f1f1f1'
+        backgroundColor: '#f1f1f1',
+        alignItems: 'center'
     },
     body: {
         paddingTop: screenHeight / 16,
@@ -51,7 +74,8 @@ const styles = StyleSheet.create({
         paddingRight: screenWidth * .05,
         fontSize: 60,
         fontWeight: 'bold',
-        color: '#00000f'
+        color: '#00000f',
+        paddingBottom: screenWidth * .1
     },
     input: {
         fontSize: 25,
@@ -59,7 +83,6 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     button: {
-        display: 'flex',
         marginTop: 15,
         padding: 10,
         fontSize: 20,
@@ -67,7 +90,13 @@ const styles = StyleSheet.create({
         color: 'white',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 100
+        borderRadius: 100,
+        height: 100,
+        marginBottom: 8
+    },
+    buttonContainer: {
+        width: screenWidth*.8,
+        height: screenWidth/3,
     }
 });
 
