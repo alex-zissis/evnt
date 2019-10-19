@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
         fontSize: 60,
         fontWeight: 'bold',
         color: '#00000f',
-        paddingBottom: screenWidth * .1
     },
     input: {
         fontSize: 25,
@@ -83,20 +82,25 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     button: {
-        marginTop: 15,
-        padding: 10,
         fontSize: 20,
-        backgroundColor: highlight,
+        padding: 10,
+        flex: 1,
         color: 'white',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 100,
-        height: 100,
-        marginBottom: 8
+        borderWidth: 1,
+        borderColor: 'transparent',
+        borderRadius: 20,
+        backgroundColor: highlight,
+        overflow: 'hidden',
     },
     buttonContainer: {
-        width: screenWidth*.8,
-        height: screenWidth/3,
+        marginTop: 30,
+        marginBottom: 8,
+        flexDirection: "row",
+        width: screenWidth*.85,
+        height: screenHeight/12,
+        justifyContent: "space-between",
     }
 });
 
