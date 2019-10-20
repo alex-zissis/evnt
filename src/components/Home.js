@@ -26,7 +26,7 @@ class Home extends React.Component {
             <SafeAreaView style={styles.container}>
                 <View>
                     <Text style={styles.title}>
-                        Welcome to <Text style={{ color: highlight }}>Evnt</Text>
+                        welcome to <Text style={{ color: highlight }}>evnt</Text>
                     </Text>
                 </View>
                 <View style={styles.buttonContainer}>
@@ -36,17 +36,17 @@ class Home extends React.Component {
                         </Text>
                     </TouchableHighlight>
                     <TouchableHighlight>
-                        <Text style={[styles.button, {backgroundColor: "lightgreen"}]}>
+                        <Text style={[styles.button, { backgroundColor: "lightgreen" }]}>
                             Hello
                         </Text>
                     </TouchableHighlight>
                     <TouchableHighlight>
-                        <Text style={[styles.button, {backgroundColor: "lightblue"}]}>
+                        <Text style={[styles.button, { backgroundColor: "lightblue" }]}>
                             Hello
                         </Text>
                     </TouchableHighlight>
                     <TouchableHighlight>
-                        <Text style={[styles.button, {backgroundColor: "pink"}]}>
+                        <Text style={[styles.button, { backgroundColor: "pink" }]}>
                             Hello
                         </Text>
                     </TouchableHighlight>
@@ -98,10 +98,10 @@ const styles = StyleSheet.create({
         marginTop: 30,
         marginBottom: 8,
         flexDirection: "row",
-        width: screenWidth*.85,
-        height: screenHeight/12,
+        width: screenWidth * .85,
+        height: screenHeight / 12,
         justifyContent: "space-between",
     }
 });
 
-    export default Home;
+export default Home;

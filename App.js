@@ -16,12 +16,22 @@ import {
   StatusBar,
 } from 'react-native';
 
-import Home from './src/components/Home';
-import Login from './src/components/Login';
+import { Scene, Router, Stack } from 'react-native-router-flux';
 
+import Home from './src/components/Home';
+import Email from './src/components/Email';
+import Login from './src/components/Login';
 
 export default class App extends React.Component {
   render() {
-    return (<Login />);
+    return (
+      <Router>
+        <Stack key="root" hideNavBar="true" duration={0}>
+          <Scene key="email" component={Email} />
+          <Scene key="login" component={Login} />
+          <Scene key="home" component={Home} />
+        </Stack>
+      </Router>
+    );
   }
 }
