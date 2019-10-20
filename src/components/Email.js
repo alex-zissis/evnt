@@ -110,7 +110,8 @@ const styles = StyleSheet.create({
         color: 'white',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 100
+        borderRadius: 10,
+        overflow: 'hidden'
     },
     instruction: {
         textAlign: 'center',
