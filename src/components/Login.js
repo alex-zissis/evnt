@@ -2,15 +2,13 @@ import React from 'react';
 import {
     SafeAreaView,
     StyleSheet,
-    ScrollView,
-    ActivityIndicator,
     View,
     Text,
-    StatusBar,
     TextInput,
     TouchableHighlight,
     Dimensions
 } from 'react-native';
+
 import { PulseIndicator } from 'react-native-indicators';
 import { Actions } from 'react-native-router-flux';
 import { styles } from './Email';
