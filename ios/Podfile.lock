@@ -182,8 +182,6 @@ PODS:
     - React-cxxreact (= 0.61.1)
     - React-jsi (= 0.61.1)
   - React-jsinspector (0.61.1)
-  - react-native-spinkit (1.4.1):
-    - React
   - React-RCTActionSheet (0.61.1):
     - React-Core/RCTActionSheetHeaders (= 0.61.1)
   - React-RCTAnimation (0.61.1):
@@ -219,6 +217,8 @@ PODS:
     - React-cxxreact (= 0.61.1)
     - React-jsi (= 0.61.1)
     - ReactCommon/jscallinvoker (= 0.61.1)
+  - RNSVG (9.12.0):
+    - React
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -238,7 +238,6 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-spinkit (from `../node_modules/react-native-spinkit`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -250,6 +249,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -285,8 +285,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
-  react-native-spinkit:
-    :path: "../node_modules/react-native-spinkit"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -307,6 +305,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -326,7 +326,6 @@ SPEC CHECKSUMS:
   React-jsi: 61ff417c95e6c3af50fb96399037e80752fb5ce7
   React-jsiexecutor: ee45274419eb95614bbbadb98e20684c5f29996e
   React-jsinspector: 574d597112f9ea3d1b717f6fb62aef764c70dd6f
-  react-native-spinkit: da294fd828216ad211fe36a5c14c1e09f09e62db
   React-RCTActionSheet: af4d951113b1e068bb30611f91b984a7a73597ff
   React-RCTAnimation: 4f518d70bb6890b7c3d9d732f84786d6693ca297
   React-RCTBlob: 072a4888c08de0eef6d04eaa727d25e577e6ff26
@@ -337,8 +336,9 @@ SPEC CHECKSUMS:
   React-RCTText: 81b62b4e7f11531a5154e4daa5617670d5a2d5de
   React-RCTVibration: 8be61459e3749d1fb02cf414edd05b3007622882
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
+  RNSVG: 75670614bca635d3dd64bc267bc199e539cb4fa9
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: 0c670f28658bf60603a49f8d90670e04223e47e6
+PODFILE CHECKSUM: 7724dcd7d42ea6ca8ef65433571cdcd77f2319d7
 
 COCOAPODS: 1.8.4

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import EventCard from './modules/EventCard';
+import FilterButton from './modules/FilterButton';
 
 const DATA = [
     {
@@ -21,17 +22,48 @@ const DATA = [
         date: '10/30/19',
         location: '127 W 24th St, New York, NY',
         coverPhoto: 'https://media.timeout.com/images/103752936/630/472/image.jpg',
-        price: 20
+        price: 20,
+        attendees: 201
     },
     {
         id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: 'Second Item',
-        location: '101 10th Ave, New York, NY'
+        title: 'MLB: Yankees vs Mets',
+        location: 'Yankee Stadium, The Bronx, NY',
+        type: 'sport',
+        date: '10/23/19',
+        price: 40,
+        attendees: 401,
+        coverPhoto: 'https://www.ballparksofbaseball.com/wp-content/uploads/2016/04/yankee16_topv2.jpg',
     },
     {
         id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-        location: '31 N 6th St, Williamsburg, NY'
+        title: 'Friday Nights @ PHD',
+        date: '10/25/19',
+        price: 30,
+        attendees: 120,
+        coverPhoto: 'https://www.therooftopguide.com/rooftop-bars-in-new-york/Bilder/PHDRooftopLounge_4_slide.jpg',
+        location: '355 W 16th St, New York, NY',
+        type: 'party'
+    },
+    {
+        id: '58694a0f-3da1-471f-bd96-145531e29d72',
+        title: 'Kyle\'s 21st',
+        location: '31 N 6th St, Williamsburg, NY',
+        type: 'other',
+        date: '10/28/19',
+        attendees: 27,
+        coverPhoto: 'https://www.rjccevents.com/images/brag-box/_654x355/stretch-marquee-21st-party-hampshire.jpg',
+        price: 0,
+    },
+    {
+        id: '58694a0f-3da1-471f-sd96-14f531e29d72',
+        title: 'Frank Ocean @ Baby\'s All Right',
+        location: 'Baby\'s All Right, Williamsburg, NY',
+        date: '10/29/19',
+        type: 'music',
+        price: 80,
+        attendees: 413,
+        coverPhoto: 'https://www.grammy.com/sites/com/files/styles/image_landscape_hero/public/frankocean-hero-142871483.jpg?itok=HeyjIY-4',
     },
 ];
 
@@ -42,7 +74,44 @@ const highlight = 'orange';
 class Home extends React.Component {
     state = {
         email: '',
-        validEmail: false
+        validEmail: false,
+        evnts: [],
+        types: ['party', 'sport', 'music', 'other'],
+        refresh: false
+    }
+
+    componentDidMount() {
+        this.filterTypes();
+    }
+
+    filterTypes() {
+        console.log(this.state.types)
+        let arr = DATA.slice();
+        console.log(arr);
+        arr = arr.filter(evnt => this.state.types.includes(evnt.type));
+        console.log(arr)
+        this.setState({
+            evnts: arr,
+        }, console.log(this.state.evnts.map(evnt => evnt.title)));
+    }
+
+    toggleType(inputType) {
+        if (this.state.types.includes(inputType)) {
+            const arr = this.state.types;
+            arr.splice(arr.indexOf(inputType), 1);
+            this.setState({
+                types: arr,
+            }, this.filterTypes())
+        } else {
+            const arr = this.state.types;
+            arr.push(inputType);
+            this.setState({
+                types: arr,
+            }, this.filterTypes())
+        }
+        this.setState({
+            refresh: !this.state.refresh,
+        })
     }
 
     render() {
@@ -52,34 +121,32 @@ class Home extends React.Component {
                     <Text style={styles.title}>
                         welcome to <Text style={{ color: highlight }}>evnt</Text>
                     </Text>
+
                 </View>
+                <View>
+                    <Text>Featured <Text style={{ color: highlight }}>evnt</Text>s</Text>
+                </View>
+                <Text style={styles.filterTitle}>i am interested in:</Text>
                 <View style={styles.buttonContainer}>
-                    <TouchableHighlight>
-                        <Text style={styles.button}>
-                            Hello
-                        </Text>
+                    <TouchableHighlight onPress={() => this.toggleType('party')} style={{ opacity: this.state.types.includes('party') ? 1 : .4 }}>
+                        <FilterButton displayText="parties" value="party" ></FilterButton>
                     </TouchableHighlight>
-                    <TouchableHighlight>
-                        <Text style={[styles.button, { backgroundColor: "lightgreen" }]}>
-                            Hello
-                        </Text>
+                    <TouchableHighlight onPress={() => this.toggleType('sport')} style={{ opacity: this.state.types.includes('sport') ? 1 : .4 }}>
+                        <FilterButton displayText="sports" value="sport"></FilterButton>
                     </TouchableHighlight>
-                    <TouchableHighlight>
-                        <Text style={[styles.button, { backgroundColor: "lightblue" }]}>
-                            Hello
-                        </Text>
+                    <TouchableHighlight onPress={() => this.toggleType('music')} style={{ opacity: this.state.types.includes('music') ? 1 : .4 }}>
+                        <FilterButton displayText="music" value="music"></FilterButton>
                     </TouchableHighlight>
-                    <TouchableHighlight>
-                        <Text style={[styles.button, { backgroundColor: "pink" }]}>
-                            Hello
-                        </Text>
+                    <TouchableHighlight onPress={() => this.toggleType('other')} style={{ opacity: this.state.types.includes('other') ? 1 : .4 }}>
+                        <FilterButton displayText="other" value="other"></FilterButton>
                     </TouchableHighlight>
                 </View>
                 <FlatList
                     style={styles.cardContainer}
                     contentContainerStyle={styles.cardContent}
-                    data={DATA}
-                    renderItem={({ item }) => <EventCard title={item.title} location={item.location} type={item.type} date={item.date} price={item.price} coverPhoto={item.coverPhoto} marginTop="20" />}
+                    data={this.state.evnts}
+                    extraData={this.state}
+                    renderItem={({ item }) => <EventCard title={item.title} location={item.location} type={item.type} date={item.date} price={item.price} coverPhoto={item.coverPhoto} attendees={item.attendees} marginTop="20" />}
                     keyExtractor={item => item.id}
                 >
                 </FlatList>
@@ -113,35 +180,29 @@ const styles = StyleSheet.create({
         width: screenWidth * .8,
         textAlign: 'center'
     },
-    button: {
-        fontSize: 20,
-        padding: 10,
-        flex: 1,
-        color: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 1,
-        borderColor: 'transparent',
-        borderRadius: 20,
-        backgroundColor: highlight,
-        overflow: 'hidden',
-    },
     buttonContainer: {
-        marginTop: 30,
         marginBottom: 8,
         flexDirection: "row",
         width: screenWidth * .85,
-        height: screenHeight / 12,
+        height: screenHeight / 18,
         justifyContent: "space-between",
     },
     cardContainer: {
         flex: 1,
         width: screenWidth,
-        marginTop: screenHeight / 64,
     },
     cardContent: {
         width: '90%',
         marginLeft: "5%",
+    },
+    filterTitle: {
+        marginTop: 30,
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 7,
+        width: screenWidth * .85,
+        textAlign: 'left',
+        color: '#8c92ac'
     }
 });
 

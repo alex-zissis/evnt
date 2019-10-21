@@ -26,6 +26,8 @@ class Login extends React.Component {
     }
 
 
+
+
     componentDidMount() {
         const parent = this;
         setTimeout(() => {
@@ -38,7 +40,7 @@ class Login extends React.Component {
             <View style={{ flex: 1 }}>
                 {this.state.spinnerVisible == true && (
                     <View style={loadingStyles.container}>
-                        <PulseIndicator color="white" size={150}>asd</PulseIndicator>
+                        <PulseIndicator color="white" size={150}></PulseIndicator>
                     </View>
                 )}
                 <SafeAreaView style={styles.container}>
@@ -76,9 +78,9 @@ class Login extends React.Component {
                         </TouchableHighlight>
 
                         {this.state.password.length <= 3 && this.state.password.length > 0 &&
-                            < Text style={styles.errorText}>
+                            <Text style={styles.errorText}>
                                 enter a valid password
-                                </Text>
+                            </Text>
                         }
                     </View>
                 </SafeAreaView >
