@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     SafeAreaView,
     StyleSheet,
@@ -8,14 +8,27 @@ import {
     StatusBar,
     TextInput,
     TouchableHighlight,
-    Dimensions
+    Dimensions,
+    TouchableWithoutFeedback
 } from 'react-native';
+
 
 import Swiper from 'react-native-swiper';
 
 import EventCard from './modules/EventCard';
 import FilterButton from './modules/FilterButton';
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import * as Animatable from 'react-native-animatable';
+
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
+Animatable.initializeRegistryWithDefinitions({
+    mainMoveUp: {
+        from: { translateY: 0 },
+        to: { translateY: -270 }
+    }
+});
+
 
 const DATA = [
     {
@@ -117,7 +130,7 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 const highlight = 'orange';
 
-class Home extends React.Component {
+class Home extends Component {
     state = {
         email: '',
         validEmail: false,
@@ -126,24 +139,31 @@ class Home extends React.Component {
         headers: true
     }
 
+    mainRef = null;
+    featureRef = null;
+
+    mainRefOnPress = () => this.mainRef.mainMoveUp(200)
+
+    featureRefOnPress = () => this.featureRef.fadeOut(200).then(this.setState({ headers: false }));
+
+    handleMainRef = ref => {
+        this.mainRef = ref;
+    }
+
+    handleFeatureRef = ref => {
+        this.featureRef = ref;
+    }
+
     componentDidMount() {
         this.filterTypes();
     }
 
-    swipeUp(stuff) {
-        console.log(this)
-        this.setState({ headers: false })
-    }
-
     filterTypes() {
-        console.log(this.state.types)
         let arr = DATA.slice();
-        console.log(arr);
         arr = arr.filter(evnt => this.state.types.includes(evnt.type));
-        console.log(arr)
         this.setState({
             evnts: arr,
-        }, console.log(this.state.evnts.map(evnt => evnt.title)));
+        });
     }
 
     toggleType(inputType) {
@@ -170,17 +190,23 @@ class Home extends React.Component {
 
         return (
             <SafeAreaView style={styles.container}>
-                {/* <GestureRecognizer
-                    onSwipeUp={this.swipeUp}
-                    config={config}> */}
 
                 <View>
                     <Text style={styles.title}>
                         welcome to <Text style={{ color: highlight }}>evnt</Text>
                     </Text>
                 </View>
-                <View style={styles.featuredContainer}>
-                    <Text style={styles.featuredTitle}>featured <Text style={{ color: highlight }}>evnt</Text>s</Text>
+                <Animatable.View ref={this.handleFeatureRef} style={styles.featuredContainer}>
+                    <View style={styles.featuredTitleRow}>
+                        <Text style={styles.featuredTitle}>featured <Text style={{ color: highlight }}>evnt</Text>s</Text>
+                        <TouchableHighlight style={styles.button}
+                            onPress={() => {
+                                this.featureRefOnPress();
+                                this.mainRefOnPress();
+                            }}>
+                            <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+                        </TouchableHighlight>
+                    </View>
                     <Swiper style={styles.wrapper} showsButtons={false}>
                         <View style={styles.slide}>
                             <EventCard title={FEATURED_EVENTS[0].title} price={FEATURED_EVENTS[0].price} location={FEATURED_EVENTS[0].location} coverPhoto={FEATURED_EVENTS[0].coverPhoto} date={FEATURED_EVENTS[0].date} type={FEATURED_EVENTS[0].type} attendees={FEATURED_EVENTS[0].attendees} />
@@ -189,32 +215,33 @@ class Home extends React.Component {
                             <EventCard title={FEATURED_EVENTS[1].title} price={FEATURED_EVENTS[1].price} location={FEATURED_EVENTS[1].location} coverPhoto={FEATURED_EVENTS[1].coverPhoto} date={FEATURED_EVENTS[1].date} type={FEATURED_EVENTS[1].type} attendees={FEATURED_EVENTS[1].attendees} />
                         </View>
                     </Swiper>
-                </View>
-                {/* </GestureRecognizer> */}
-                <Text style={styles.filterTitle}>i am interested in:</Text>
-                <View style={styles.buttonContainer}>
-                    <TouchableHighlight onPress={() => this.toggleType('club')} style={{ opacity: this.state.types.includes('club') ? 1 : .4 }}>
-                        <FilterButton displayText="clubs" value="club" ></FilterButton>
-                    </TouchableHighlight>
-                    <TouchableHighlight onPress={() => this.toggleType('sport')} style={{ opacity: this.state.types.includes('sport') ? 1 : .4 }}>
-                        <FilterButton displayText="sports" value="sport"></FilterButton>
-                    </TouchableHighlight>
-                    <TouchableHighlight onPress={() => this.toggleType('music')} style={{ opacity: this.state.types.includes('music') ? 1 : .4 }}>
-                        <FilterButton displayText="music" value="music"></FilterButton>
-                    </TouchableHighlight>
-                    <TouchableHighlight onPress={() => this.toggleType('other')} style={{ opacity: this.state.types.includes('other') ? 1 : .4 }}>
-                        <FilterButton displayText="other" value="other"></FilterButton>
-                    </TouchableHighlight>
-                </View>
-                <FlatList
-                    style={styles.cardContainer}
-                    contentContainerStyle={styles.cardContent}
-                    data={this.state.evnts}
-                    extraData={this.state}
-                    renderItem={({ item }) => <EventCard title={item.title} location={item.location} type={item.type} date={item.date} price={item.price} coverPhoto={item.coverPhoto} attendees={item.attendees} marginTop="20" />}
-                    keyExtractor={item => item.id}
-                >
-                </FlatList>
+                </Animatable.View>
+                <Animatable.View style={styles.main} ref={this.handleMainRef}>
+                    <Text style={styles.filterTitle}>i am interested in:</Text>
+                    <View style={styles.buttonContainer}>
+                        <TouchableHighlight onPress={() => this.toggleType('club')} style={{ opacity: this.state.types.includes('club') ? 1 : .4 }}>
+                            <FilterButton displayText="clubs" value="club" ></FilterButton>
+                        </TouchableHighlight>
+                        <TouchableHighlight onPress={() => this.toggleType('sport')} style={{ opacity: this.state.types.includes('sport') ? 1 : .4 }}>
+                            <FilterButton displayText="sports" value="sport"></FilterButton>
+                        </TouchableHighlight>
+                        <TouchableHighlight onPress={() => this.toggleType('music')} style={{ opacity: this.state.types.includes('music') ? 1 : .4 }}>
+                            <FilterButton displayText="music" value="music"></FilterButton>
+                        </TouchableHighlight>
+                        <TouchableHighlight onPress={() => this.toggleType('other')} style={{ opacity: this.state.types.includes('other') ? 1 : .4 }}>
+                            <FilterButton displayText="other" value="other"></FilterButton>
+                        </TouchableHighlight>
+                    </View>
+                    <FlatList
+                        style={styles.cardContainer}
+                        contentContainerStyle={styles.cardContent}
+                        data={this.state.evnts}
+                        extraData={this.state}
+                        renderItem={({ item }) => <EventCard title={item.title} location={item.location} type={item.type} date={item.date} price={item.price} coverPhoto={item.coverPhoto} attendees={item.attendees} marginTop="20" />}
+                        keyExtractor={item => item.id}
+                    >
+                    </FlatList>
+                </Animatable.View>
             </SafeAreaView >
         )
     }
@@ -271,7 +298,7 @@ const styles = StyleSheet.create({
     },
     featuredContainer: {
         height: 260,
-        marginTop: 20
+        marginTop: 20,
     },
     wrapper: {
 
@@ -282,10 +309,39 @@ const styles = StyleSheet.create({
         height: 170,
     },
     featuredTitle: {
-        marginLeft: "2.5%",
         fontSize: 26,
         fontWeight: 'bold',
+    },
+    featuredTitleRow: {
+        flexDirection: 'row',
+        marginLeft: "5%",
+        marginRight: "5%",
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 8
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        borderRadius: 10,
+        overflow: 'hidden',
+        borderWidth: 2,
+        backgroundColor: 'white',
+        borderColor: 'white',
+        shadowColor: "#000",
+        padding: 5,
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.18,
+        shadowRadius: 1.00,
+        elevation: 1,
+    },
+    main: {
+        flex: 1,
+        alignItems: 'center',
     }
 });
 

@@ -111,17 +111,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     instruction: {
         textAlign: 'center',
         marginTop: screenHeight / 32,
         fontSize: 20,
-        color: '#8c92ac'
+        color: '#8c92ac',
     },
     errorText: {
         marginTop: screenHeight / 32,
-        color: '#d9534f'
+        color: '#d9534f',
     }
 });
 
