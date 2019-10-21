@@ -15,6 +15,7 @@ import Swiper from 'react-native-swiper';
 
 import EventCard from './modules/EventCard';
 import FilterButton from './modules/FilterButton';
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 const DATA = [
     {
@@ -122,11 +123,16 @@ class Home extends React.Component {
         validEmail: false,
         evnts: [],
         types: ['club', 'sport', 'music', 'other'],
-        refresh: false
+        headers: true
     }
 
     componentDidMount() {
         this.filterTypes();
+    }
+
+    swipeUp(stuff) {
+        console.log(this)
+        this.setState({ headers: false })
     }
 
     filterTypes() {
@@ -154,30 +160,37 @@ class Home extends React.Component {
                 types: arr,
             }, this.filterTypes())
         }
-        this.setState({
-            refresh: !this.state.refresh,
-        })
     }
 
     render() {
+        const config = {
+            velocityThreshold: 0.2,
+            directionalOffsetThreshold: 60
+        };
+
         return (
             <SafeAreaView style={styles.container}>
-                <View>
-                    <Text style={styles.title}>
-                        welcome to <Text style={{ color: highlight }}>evnt</Text>
-                    </Text>
-                </View>
-                <View style={styles.featuredContainer}>
-                    <Text style={styles.featuredTitle}>featured <Text style={{ color: highlight }}>evnt</Text>s</Text>
-                    <Swiper style={styles.wrapper} showsButtons={false}>
-                        <View style={styles.slide}>
-                            <EventCard title={FEATURED_EVENTS[0].title} price={FEATURED_EVENTS[0].price} location={FEATURED_EVENTS[0].location} coverPhoto={FEATURED_EVENTS[0].coverPhoto} date={FEATURED_EVENTS[0].date} type={FEATURED_EVENTS[0].type} attendees={FEATURED_EVENTS[0].attendees} />
-                        </View>
-                        <View style={styles.slide}>
-                            <EventCard title={FEATURED_EVENTS[1].title} price={FEATURED_EVENTS[1].price} location={FEATURED_EVENTS[1].location} coverPhoto={FEATURED_EVENTS[1].coverPhoto} date={FEATURED_EVENTS[1].date} type={FEATURED_EVENTS[1].type} attendees={FEATURED_EVENTS[1].attendees} />
-                        </View>
-                    </Swiper>
-                </View>
+                <GestureRecognizer
+                    onSwipeUp={this.swipeUp}
+                    config={config}>
+
+                    <View>
+                        <Text style={styles.title}>
+                            welcome to <Text style={{ color: highlight }}>evnt</Text>
+                        </Text>
+                    </View>
+                    <View style={styles.featuredContainer}>
+                        <Text style={styles.featuredTitle}>featured <Text style={{ color: highlight }}>evnt</Text>s</Text>
+                        <Swiper style={styles.wrapper} showsButtons={false}>
+                            <View style={styles.slide}>
+                                <EventCard title={FEATURED_EVENTS[0].title} price={FEATURED_EVENTS[0].price} location={FEATURED_EVENTS[0].location} coverPhoto={FEATURED_EVENTS[0].coverPhoto} date={FEATURED_EVENTS[0].date} type={FEATURED_EVENTS[0].type} attendees={FEATURED_EVENTS[0].attendees} />
+                            </View>
+                            <View style={styles.slide}>
+                                <EventCard title={FEATURED_EVENTS[1].title} price={FEATURED_EVENTS[1].price} location={FEATURED_EVENTS[1].location} coverPhoto={FEATURED_EVENTS[1].coverPhoto} date={FEATURED_EVENTS[1].date} type={FEATURED_EVENTS[1].type} attendees={FEATURED_EVENTS[1].attendees} />
+                            </View>
+                        </Swiper>
+                    </View>
+                </GestureRecognizer>
                 <Text style={styles.filterTitle}>i am interested in:</Text>
                 <View style={styles.buttonContainer}>
                     <TouchableHighlight onPress={() => this.toggleType('club')} style={{ opacity: this.state.types.includes('club') ? 1 : .4 }}>
@@ -202,7 +215,7 @@ class Home extends React.Component {
                     keyExtractor={item => item.id}
                 >
                 </FlatList>
-            </SafeAreaView>
+            </SafeAreaView >
         )
     }
 };
