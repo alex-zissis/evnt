@@ -216,7 +216,7 @@ class Home extends Component {
                         </View>
                     </Swiper>
                 </Animatable.View>
-                <Animatable.View style={styles.main} ref={this.handleMainRef}>
+                <Animatable.View style={[styles.main, { height: this.state.headers ? "100%" : "80%" }]} ref={this.handleMainRef}>
                     <Text style={styles.filterTitle}>i am interested in:</Text>
                     <View style={styles.buttonContainer}>
                         <TouchableHighlight onPress={() => this.toggleType('club')} style={{ opacity: this.state.types.includes('club') ? 1 : .4 }}>
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
         elevation: 1,
     },
     main: {
-        flex: 1,
+        // flex: 1,
         alignItems: 'center',
     }
 });
