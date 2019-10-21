@@ -90,7 +90,7 @@ class Login extends React.Component {
 const loadingStyles = StyleSheet.create({
     container: {
         height: screenHeight,
-        backgroundColor: highlight
+        backgroundColor: highlight,
     }
 })
 
