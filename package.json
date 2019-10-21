@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "16.9.0",
     "react-native": "0.61.1",
+    "react-native-easy-grid": "^0.2.2",
     "react-native-indicators": "^0.17.0",
     "react-native-router-flux": "^4.0.6"
   },

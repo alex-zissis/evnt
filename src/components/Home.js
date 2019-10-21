@@ -18,7 +18,7 @@ const DATA = [
         id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
         title: 'Halloween Party @ Revs Nightclub',
         type: 'party',
-        date: '10/30/2019',
+        date: '10/30/19',
         location: '127 W 24th St, New York, NY',
         coverPhoto: 'https://media.timeout.com/images/103752936/630/472/image.jpg',
         price: 20
@@ -79,7 +79,7 @@ class Home extends React.Component {
                     style={styles.cardContainer}
                     contentContainerStyle={styles.cardContent}
                     data={DATA}
-                    renderItem={({ item }) => <EventCard title={item.title} location={item.location} type={item.type} date={item.date} price={item.price} image={item.image} marginTop="20" />}
+                    renderItem={({ item }) => <EventCard title={item.title} location={item.location} type={item.type} date={item.date} price={item.price} coverPhoto={item.coverPhoto} marginTop="20" />}
                     keyExtractor={item => item.id}
                 >
                 </FlatList>
