@@ -130,14 +130,14 @@ class EventCard extends React.Component {
                             </ScrollView>
                         </Row>
                         <Row style={this.styles.row}>
-                            <View style={this.styles.evntButtonContainer}>
+                            {/* <View style={this.styles.evntButtonContainer}>
                                 <TouchableHighlight style={{ marginRight: 5 }}>
                                     <Text style={this.styles.evntButton}>Going</Text>
                                 </TouchableHighlight>
                                 <TouchableHighlight style={{ marginLeft: 5 }}>
                                     <Text style={this.styles.evntButton}>Interested</Text>
                                 </TouchableHighlight>
-                            </View>
+                            </View> */}
 
                         </Row>
                     </Grid>
