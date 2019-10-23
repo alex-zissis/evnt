@@ -19,6 +19,7 @@ import {
 import { Scene, Router, Stack } from 'react-native-router-flux';
 
 import Home from './src/components/Home';
+import Event from './src/components/Event';
 import Email from './src/components/Email';
 import Login from './src/components/Login';
 
@@ -30,6 +31,7 @@ export default class App extends React.Component {
           {/* <Scene key="email" component={Email} />
           <Scene key="login" component={Login} /> */}
           <Scene key="home" component={Home} />
+          <Scene key="event" component={Event} />
         </Stack>
       </Router>
     );

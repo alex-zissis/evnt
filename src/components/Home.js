@@ -18,6 +18,7 @@ import Swiper from 'react-native-swiper';
 import EventCard from './modules/EventCard';
 import FilterButton from './modules/FilterButton';
 import * as Animatable from 'react-native-animatable';
+import { Actions } from 'react-native-router-flux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -237,7 +238,23 @@ class Home extends Component {
                         contentContainerStyle={styles.cardContent}
                         data={this.state.evnts}
                         extraData={this.state}
-                        renderItem={({ item }) => <EventCard title={item.title} location={item.location} type={item.type} date={item.date} price={item.price} coverPhoto={item.coverPhoto} attendees={item.attendees} marginTop="20" />}
+                        renderItem={({ item }) => {
+                            return (
+                                <TouchableHighlight onPress={() => {
+                                    Actions.event({ item: item });
+                                }}>
+                                    <EventCard
+                                        title={item.title}
+                                        location={item.location}
+                                        type={item.type}
+                                        date={item.date}
+                                        price={item.price}
+                                        coverPhoto={item.coverPhoto}
+                                        attendees={item.attendees}
+                                        marginTop="20" />
+                                </TouchableHighlight>
+                            );
+                        }}
                         keyExtractor={item => item.id}
                     >
                     </FlatList>
