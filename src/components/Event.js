@@ -40,7 +40,7 @@ class Event extends React.Component {
                 </View>
 
                 <TouchableHighlight style={styles.button} onPress={() => Actions.home({ headers: this.props.headers })}>
-                    <Text>Back</Text>
+                    <Text>back</Text>
                 </TouchableHighlight>
 
                 <ScrollView style={styles.scrollView} contentContainerStyle={{ alignItems: 'center' }}>
@@ -61,7 +61,7 @@ class Event extends React.Component {
                                     this.setState({ 'interested': false });
                                 }
                             }}>
-                            <Text>Going</Text>
+                            <Text>going</Text>
                         </TouchableHighlight>
 
                         <TouchableHighlight
@@ -73,7 +73,7 @@ class Event extends React.Component {
                                     this.setState({ 'attendees': this.state.attendees - 1 })
                                 }
                             }}>
-                            <Text>Interested</Text>
+                            <Text>interested</Text>
                         </TouchableHighlight>
                     </View>
 
@@ -166,6 +166,7 @@ const styles = new StyleSheet.create({
         width: screenWidth,
         textAlign: 'left',
         marginLeft: screenWidth * .2,
+        fontWeight: 'bold'
     },
     row: {
         flexDirection: 'row',
