@@ -8,6 +8,7 @@ import {
     TouchableHighlight,
     Dimensions
 } from 'react-native';
+import firebase from 'react-native-firebase';
 
 import { PulseIndicator } from 'react-native-indicators';
 import { Actions } from 'react-native-router-flux';
@@ -19,20 +20,35 @@ const highlight = 'orange';
 
 class Login extends React.Component {
     state = {
-        email: '',
+        email: 'sp96651n@pace.edu',
         firstName: '',
         password: '',
         spinnerVisible: true,
+        user: null,
     }
-
-
-
+    unsubscriber = null;
+    
+      componentWillUnmount() {
+        if (this.unsubscriber) {
+          this.unsubscriber();
+        }
+      }
 
     componentDidMount() {
         const parent = this;
-        setTimeout(() => {
-            parent.setState({ 'spinnerVisible': false })
-        }, 2000)
+        // setTimeout(() => {
+        //     parent.setState({ 'spinnerVisible': false })
+        // }, 2000);
+        parent.setState({ 'spinnerVisible': false })
+        this.unsubscriber = firebase.app('evnt').auth().onAuthStateChanged((user) => {
+            this.setState({ user });
+        });
+    }
+
+    login() {
+        firebase.app('evnt').auth().signInWithEmailAndPassword(this.state.email, this.state.password).then(user => {
+            Actions.home({user: user});
+        });
     }
 
     render() {
@@ -70,7 +86,7 @@ class Login extends React.Component {
                             style={this.state.password.length > 3 ? { opacity: 1 } : { opacity: .4 }}
                             onPress={() => {
                                 if (this.state.password.length > 3) {
-                                    Actions.home({ email: this.state.email, firstName: "Alex" });
+                                   this.login();
                                 }
                             }}
                         >

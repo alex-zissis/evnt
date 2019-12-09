@@ -34,6 +34,9 @@ target 'evnt' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'Firebase/Core'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Database'
+
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
   # pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
