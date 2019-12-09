@@ -33,10 +33,10 @@ target 'evnt' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-
+  pod 'Firebase/Core'
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
-  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+  # pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
 
   target 'evntTests' do
     inherit! :search_paths
