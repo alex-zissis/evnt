@@ -24,8 +24,9 @@ class Email extends React.Component {
     }
     ref;
 
-    componentDidMount() {
+    componentWillMount() {
         this.ref = firebase.app('evnt').database().ref();
+        console.log(firebase.app('evnt').auth().currentUser);
     }
 
     next = () => {

@@ -25,7 +25,7 @@ import Email from './src/components/Email';
 import Login from './src/components/Login';
 
 export default class App extends React.Component {
-  componentDidMount() {
+  componentWillMount() {
     const iosConfig = {
       clientId: '786413911892-8v8qcgr3k5cnqbdva3agdovno8t4nne6.apps.googleusercontent.com',
       appId: '1:786413911892:ios:f301fcfb0b03f779c712c1',
@@ -34,7 +34,7 @@ export default class App extends React.Component {
       storageBucket: 'evnt-55158.appspot.com',
       messagingSenderId: '786413911892',
       projectId: 'evnt-55158',
-    
+
       // enable persistence by adding the below flag
       persistence: true,
     };

@@ -12,8 +12,6 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 import firebase from 'react-native-firebase';
-const ref = firebase.app('evnt').database().ref();
-
 
 import Swiper from 'react-native-swiper';
 
@@ -24,6 +22,7 @@ import { Actions } from 'react-native-router-flux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { PulseIndicator } from 'react-native-indicators';
 
 Animatable.initializeRegistryWithDefinitions({
     mainMoveUp: {
@@ -31,117 +30,6 @@ Animatable.initializeRegistryWithDefinitions({
         to: { translateY: -270 }
     }
 });
-
-
-const DATA = [
-    {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        title: 'Halloween Party @ Revs Nightclub',
-        type: 'club',
-        date: '10/31/19',
-        location: '127 W 24th St, New York, NY',
-        coverPhoto: 'https://media.timeout.com/images/103752936/630/472/image.jpg',
-        price: 20,
-        attendees: 201,
-        startTime: "8:00",
-        endTime: "3:00am",
-        description: "Bring in spooky season with a bang, at the Rev's Halloween Party. The party will get underway at 8pm.",
-        going: false,
-        interested: false
-    },
-    {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: 'MLB: Yankees vs Mets',
-        location: 'Yankee Stadium, The Bronx, NY',
-        type: 'sport',
-        date: '10/23/19',
-        price: 40,
-        attendees: 401,
-        coverPhoto: 'https://www.ballparksofbaseball.com/wp-content/uploads/2016/04/yankee16_topv2.jpg',
-        going: false,
-        interested: false,
-        startTime: "8:00",
-        endTime: "10:00pm",
-        description: "Come out to Yankee Stadium to watch the Yankees take on their cross-town rivals, the Mets.",
-    },
-    {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Friday Nights @ PHD',
-        date: '10/25/19',
-        price: 30,
-        attendees: 120,
-        coverPhoto: 'https://www.therooftopguide.com/rooftop-bars-in-new-york/Bilder/PHDRooftopLounge_4_slide.jpg',
-        location: '355 W 16th St, New York, NY',
-        type: 'club',
-        going: false,
-        interested: false,
-        startTime: "8:00",
-        endTime: "4:00am",
-        description: "Friday Nights @ PHD are always a great time with live DJ sets, $8 cocktails and great city views.",
-    },
-    {
-        id: '58694a0f-3da1-471f-bd96-145531e29d72',
-        title: 'Kyle\'s 21st',
-        location: '31 N 6th St, Williamsburg, NY',
-        type: 'other',
-        date: '10/28/19',
-        attendees: 27,
-        coverPhoto: 'https://www.rjccevents.com/images/brag-box/_654x355/stretch-marquee-21st-party-hampshire.jpg',
-        price: 0,
-        going: false,
-        interested: false,
-        startTime: "8:00",
-        endTime: "12:00am",
-        description: "Hey guys, \n I'm turning 21 this weekend and would love if you could make it out.",
-    },
-    {
-        id: '58694a0f-3da1-471f-sd96-14f531e29d72',
-        title: 'Frank Ocean @ Baby\'s All Right',
-        location: 'Baby\'s All Right, Williamsburg, NY',
-        date: '10/29/19',
-        type: 'music',
-        price: 80,
-        attendees: 413,
-        coverPhoto: 'https://www.grammy.com/sites/com/files/styles/image_landscape_hero/public/frankocean-hero-142871483.jpg?itok=HeyjIY-4',
-        going: false,
-        interested: false,
-        startTime: "8:00",
-        endTime: "10:00pm",
-        description: "Frank Ocean is touring for the first time in 2019, see his show at Baby's All Right in Brooklyn.",
-    },
-    {
-        id: 'bd7acbea-c1b1-46c2-aed5-3ad53asb28ba',
-        title: 'NFL: Jets vs Giants',
-        type: 'sport',
-        date: '10/27/19',
-        location: 'Metlife Stadium, East Rutherford, NJ',
-        coverPhoto: 'https://static.clubs.nfl.com/image/private/t_editorial_landscape_12_desktop/giants/u8hfqj9wqaqodrc48ppk',
-        price: 80,
-        attendees: 462,
-        going: false,
-        interested: false,
-        startTime: "8:00",
-        endTime: "10:00pm",
-        description: "Come out to Metlife Stadium to watch the Jets take on their cross-town rivals, the Giants.",
-    },
-    {
-        id: '3ac68afc-c605-4sd3-a4f8-fbf91aa97f63',
-        title: 'Post Malone @ MSG',
-        location: 'Madison Square Garden, New York, NY',
-        type: 'music',
-        date: '10/25/19',
-        price: 72,
-        attendees: 542,
-        coverPhoto: 'https://ksassets.timeincuk.net/wp/uploads/sites/55/2019/09/post-malone-saint-tropez-music-video@2000x1270-920x584.jpg',
-        going: false,
-        interested: false,
-        startTime: "8:00",
-        endTime: "10:00pm",
-        description: "Do not miss the new Post Malone tour, coming to MSG pm 10/25/2019.",
-    },
-];
-
-const FEATURED_EVENTS = [DATA[5], DATA[6]]
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -153,11 +41,14 @@ class Home extends Component {
         validEmail: false,
         user: this.props.user,
         evnts: [],
+        featured_evnts: [],
         data: [],
         types: ['club', 'sport', 'music', 'other'],
-        headers: this.props.headers ? this.props.headers : true
+        headers: this.props.headers ? this.props.headers : true,
+        spinnerVisible: true,
     }
 
+    ref = null;
     mainRef = null;
     featureRef = null;
 
@@ -174,15 +65,21 @@ class Home extends Component {
     }
 
     componentWillMount() {
-        ref.child('events').orderByKey().on("value", (snapshot) => {
+        this.ref = firebase.app('evnt').database().ref();
+        this.ref.child('events').orderByKey().on("value", (snapshot) => {
             if (snapshot.val() !== null) {
                 const obj = snapshot.val();
                 const events = Object.keys(obj).map(i => {
                     const event = obj[i];
                     event.id = i;
+                    if (event.attendees === null || event.attendees === undefined) {
+                        event.attendees = {};
+                    }
                     return event;
                 });
-                this.data = events;
+                this.setState({ data: events }, () => {
+                    this.setState({ featured_evnts: [this.state.data[3], this.state.data[5]] }, () => this.setState({ spinnerVisible: false }))
+                });
                 this.filterTypes();
             }
         })
@@ -190,7 +87,7 @@ class Home extends Component {
 
 
     filterTypes() {
-        let arr = this.data.slice();
+        let arr = this.state.data.slice();
         arr = arr.filter(evnt => this.state.types.includes(evnt.type));
         this.setState({
             evnts: arr,
@@ -220,84 +117,95 @@ class Home extends Component {
         };
 
         return (
-            <SafeAreaView style={styles.container}>
-
-                <View>
-                    <Text style={styles.title}>
-                        welcome to <Text style={{ color: highlight }}>evnt</Text>
-                    </Text>
-                </View>
-                <Animatable.View ref={this.handleFeatureRef} style={styles.featuredContainer}>
-                    <View style={styles.featuredTitleRow}>
-                        <Text style={styles.featuredTitle}>featured <Text style={{ color: highlight }}>evnt</Text>s</Text>
-                        <TouchableHighlight style={styles.button}
-                            onPress={() => {
-                                this.featureRefOnPress();
-                                this.mainRefOnPress();
-                            }}>
-                            <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
-                        </TouchableHighlight>
+            <View style={{ flex: 1 }}>
+                {this.state.spinnerVisible == true && (
+                    <View style={loadingStyles.container}>
+                        <PulseIndicator color="white" size={150}></PulseIndicator>
                     </View>
-                    <Swiper style={styles.wrapper} showsButtons={false}>
-                        <View style={styles.slide}>
-                            <TouchableHighlight style={styles.eventCardWrapper} onPress={() => {
-                                Actions.event({ item: FEATURED_EVENTS[0], headers: this.state.headers });
-                            }}>
-                                <EventCard title={FEATURED_EVENTS[0].title} price={FEATURED_EVENTS[0].price} location={FEATURED_EVENTS[0].location} coverPhoto={FEATURED_EVENTS[0].coverPhoto} date={FEATURED_EVENTS[0].date} type={FEATURED_EVENTS[0].type} attendees={FEATURED_EVENTS[0].attendees} />
-                            </TouchableHighlight>
-                        </View>
-                        <View style={styles.slide}>
-                            <TouchableHighlight style={styles.eventCardWrapper} onPress={() => {
-                                Actions.event({ item: FEATURED_EVENTS[1], headers: this.state.headers });
-                            }}>
-                                <EventCard title={FEATURED_EVENTS[1].title} price={FEATURED_EVENTS[1].price} location={FEATURED_EVENTS[1].location} coverPhoto={FEATURED_EVENTS[1].coverPhoto} date={FEATURED_EVENTS[1].date} type={FEATURED_EVENTS[1].type} attendees={FEATURED_EVENTS[1].attendees} />
-                            </TouchableHighlight>
-                        </View>
-                    </Swiper>
-                </Animatable.View>
-                <Animatable.View style={[styles.main, { height: this.state.headers ? "100%" : "80%" }]} ref={this.handleMainRef}>
-                    <Text style={styles.filterTitle}>i am interested in:</Text>
-                    <View style={styles.buttonContainer}>
-                        <TouchableHighlight onPress={() => this.toggleType('club')} style={{ opacity: this.state.types.includes('club') ? 1 : .4 }}>
-                            <FilterButton displayText="clubs" value="club" ></FilterButton>
-                        </TouchableHighlight>
-                        <TouchableHighlight onPress={() => this.toggleType('sport')} style={{ opacity: this.state.types.includes('sport') ? 1 : .4 }}>
-                            <FilterButton displayText="sports" value="sport"></FilterButton>
-                        </TouchableHighlight>
-                        <TouchableHighlight onPress={() => this.toggleType('music')} style={{ opacity: this.state.types.includes('music') ? 1 : .4 }}>
-                            <FilterButton displayText="music" value="music"></FilterButton>
-                        </TouchableHighlight>
-                        <TouchableHighlight onPress={() => this.toggleType('other')} style={{ opacity: this.state.types.includes('other') ? 1 : .4 }}>
-                            <FilterButton displayText="other" value="other"></FilterButton>
-                        </TouchableHighlight>
+                )}
+                <SafeAreaView style={styles.container}>
+                    <View>
+                        <Text style={styles.title}>
+                            welcome to <Text style={{ color: highlight }}>evnt</Text>
+                        </Text>
                     </View>
-                    <FlatList
-                        style={styles.cardContainer}
-                        contentContainerStyle={styles.cardContent}
-                        data={this.state.evnts}
-                        extraData={this.state}
-                        renderItem={({ item }) => {
-                            return (
-                                <TouchableHighlight onPress={() => {
-                                    Actions.event({ item: item, headers: this.state.headers });
+                    <Animatable.View ref={this.handleFeatureRef} style={styles.featuredContainer}>
+                        <View style={styles.featuredTitleRow}>
+                            <Text style={styles.featuredTitle}>featured <Text style={{ color: highlight }}>evnt</Text>s</Text>
+                            <TouchableHighlight style={styles.button}
+                                onPress={() => {
+                                    this.featureRefOnPress();
+                                    this.mainRefOnPress();
                                 }}>
-                                    <EventCard
-                                        title={item.title}
-                                        location={item.location}
-                                        type={item.type}
-                                        date={item.date}
-                                        price={item.price}
-                                        coverPhoto={item.coverPhoto}
-                                        attendees={item.attendees}
-                                        marginTop="20" />
-                                </TouchableHighlight>
-                            );
-                        }}
-                        keyExtractor={item => item.id}
-                    >
-                    </FlatList>
-                </Animatable.View>
-            </SafeAreaView >
+                                <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+                            </TouchableHighlight>
+                        </View>
+                        <Swiper style={styles.wrapper} showsButtons={false}>
+                            <View style={styles.slide}>
+                                {this.state.featured_evnts[0] &&
+                                    <TouchableHighlight style={styles.eventCardWrapper} onPress={() => {
+                                        Actions.event({ item: this.state.featured_evnts[0], headers: this.state.headers });
+                                    }}>
+                                        <EventCard title={this.state.featured_evnts[0].title} price={this.state.featured_evnts[0].price} location={this.state.featured_evnts[0].location} coverPhoto={this.state.featured_evnts[0].coverPhoto} date={this.state.featured_evnts[0].date} type={this.state.featured_evnts[0].type} attendees={this.state.featured_evnts[0].attendees} />
+                                    </TouchableHighlight>
+                                }
+                            </View>
+                            <View style={styles.slide}>
+                                {this.state.featured_evnts[1] &&
+
+                                    <TouchableHighlight style={styles.eventCardWrapper} onPress={() => {
+                                        Actions.event({ item: this.state.featured_evnts[1], headers: this.state.headers });
+                                    }}>
+                                        <EventCard title={this.state.featured_evnts[1].title} price={this.state.featured_evnts[1].price} location={this.state.featured_evnts[1].location} coverPhoto={this.state.featured_evnts[1].coverPhoto} date={this.state.featured_evnts[1].date} type={this.state.featured_evnts[1].type} attendees={this.state.featured_evnts[1].attendees} />
+                                    </TouchableHighlight>
+                                }
+                            </View>
+                        </Swiper>
+                    </Animatable.View>
+                    <Animatable.View style={[styles.main, { height: this.state.headers ? "100%" : "80%" }]} ref={this.handleMainRef}>
+                        <Text style={styles.filterTitle}>i am interested in:</Text>
+                        <View style={styles.buttonContainer}>
+                            <TouchableHighlight onPress={() => this.toggleType('club')} style={{ opacity: this.state.types.includes('club') ? 1 : .4 }}>
+                                <FilterButton displayText="clubs" value="club" ></FilterButton>
+                            </TouchableHighlight>
+                            <TouchableHighlight onPress={() => this.toggleType('sport')} style={{ opacity: this.state.types.includes('sport') ? 1 : .4 }}>
+                                <FilterButton displayText="sports" value="sport"></FilterButton>
+                            </TouchableHighlight>
+                            <TouchableHighlight onPress={() => this.toggleType('music')} style={{ opacity: this.state.types.includes('music') ? 1 : .4 }}>
+                                <FilterButton displayText="music" value="music"></FilterButton>
+                            </TouchableHighlight>
+                            <TouchableHighlight onPress={() => this.toggleType('other')} style={{ opacity: this.state.types.includes('other') ? 1 : .4 }}>
+                                <FilterButton displayText="other" value="other"></FilterButton>
+                            </TouchableHighlight>
+                        </View>
+                        <FlatList
+                            style={styles.cardContainer}
+                            contentContainerStyle={styles.cardContent}
+                            data={this.state.evnts}
+                            extraData={this.state}
+                            renderItem={({ item }) => {
+                                return (
+                                    <TouchableHighlight onPress={() => {
+                                        Actions.event({ item: item, user: this.state.user, headers: this.state.headers });
+                                    }}>
+                                        <EventCard
+                                            title={item.title}
+                                            location={item.location}
+                                            type={item.type}
+                                            date={item.date}
+                                            price={item.price}
+                                            coverPhoto={item.coverPhoto}
+                                            attendees={Object.keys(item.attendees).length}
+                                            marginTop="20" />
+                                    </TouchableHighlight>
+                                );
+                            }}
+                            keyExtractor={item => item.id}
+                        >
+                        </FlatList>
+                    </Animatable.View>
+                </SafeAreaView >
+            </View>
         )
     }
 };
@@ -403,5 +311,12 @@ const styles = StyleSheet.create({
         height: "100%"
     }
 });
+
+const loadingStyles = StyleSheet.create({
+    container: {
+        height: screenHeight,
+        backgroundColor: highlight,
+    }
+})
 
 export default Home;

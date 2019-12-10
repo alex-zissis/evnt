@@ -6,11 +6,14 @@ import {
     View,
     Text,
     Image,
+    FlatList,
     StatusBar,
     TextInput,
     TouchableHighlight,
     Dimensions
 } from 'react-native';
+
+import firebase from 'react-native-firebase';
 
 import { Actions } from 'react-native-router-flux';
 
@@ -27,10 +30,54 @@ const iconColor = '#8c92ac';
 
 class Event extends React.Component {
     state = {
-        attendees: this.props.item.attendees,
+        attendees: Object.keys(this.props.item.attendees).length,
+        attendeesObj: this.props.item.attendees,
+        attendeesArr: [],
         going: this.props.item.going,
         interested: this.props.item.interested,
+        showAttendees: false,
     };
+    ref = null;
+
+    componentWillMount() {
+        console.log(this.props.user)
+        console.log(this.props.item.attendees)
+
+        if (this.props.item.attendees[this.props.user.userId] !== undefined) {
+            this.setState({ going: true })
+        }
+        this.ref = firebase.app('evnt').database().ref();
+        this.updateAttendees();
+    }
+
+    updateAttendees() {
+        this.ref.child('events').child(this.props.item.id).child('attendees').on('value', snapshot => {
+            if (snapshot != null) {
+                const original = snapshot.val();
+                console.log(original)
+                try {
+                    const array = Object.keys(original).map(key => {
+                        return { userId: key, name: original[key] }
+                    });
+                    this.setState({ attendeesObj: original, attendeesArr: array });
+                } catch (e) {
+                    this.setState({ attendeesObj: {}, attendeesArr: [] });
+                }
+            } else {
+                this.setState({ attendeesObj: {}, attendeesArr: [] });
+            }
+        });
+    }
+
+    removeAttendee() {
+        this.ref.child('events').child(this.props.item.id).child('attendees').child(this.props.user.userId).remove();
+        this.updateAttendees();
+    }
+
+    addAttendee() {
+        this.ref.child('events').child(this.props.item.id).child('attendees').child(this.props.user.userId).set(`${this.props.user.firstName} ${this.props.user.lastName}`);
+        this.updateAttendees();
+    }
 
     render() {
         return (
@@ -39,7 +86,7 @@ class Event extends React.Component {
                     <Image source={{ uri: this.props.item.coverPhoto }} style={styles.image} />
                 </View>
 
-                <TouchableHighlight style={styles.button} onPress={() => Actions.home({ headers: this.props.headers })}>
+                <TouchableHighlight style={styles.button} onPress={() => Actions.home({ headers: this.props.headers, user: this.props.user })}>
                     <Text>back</Text>
                 </TouchableHighlight>
 
@@ -53,10 +100,20 @@ class Event extends React.Component {
                         <TouchableHighlight
                             style={[styles.rsvpButton, { opacity: this.state.going ? 1 : .5 }]}
                             onPress={() => {
+                                if (this.state.going) {
+                                    // remove the atendee record
+                                    console.log(`events/${this.props.item.id}/attendees/${this.props.user.userId}`)
+                                    this.removeAttendee();
+                                } else {
+                                    this.addAttendee();
+                                }
+                                // this.ref.child('events').child(this.props.item.id).child('attendees').push()
+                                // }
                                 this.setState(
                                     { 'going': !this.state.going },
                                     this.setState({ 'attendees': !this.state.going ? this.state.attendees + 1 : this.state.attendees - 1 })
                                 );
+
                                 if (this.state.interested && !this.state.going) {
                                     this.setState({ 'interested': false });
                                 }
@@ -69,6 +126,7 @@ class Event extends React.Component {
                             onPress={() => {
                                 this.setState({ 'interested': !this.state.interested })
                                 if (this.state.going && !this.state.interested) {
+                                    this.removeAttendee();
                                     this.setState({ 'going': false });
                                     this.setState({ 'attendees': this.state.attendees - 1 })
                                 }
@@ -96,10 +154,12 @@ class Event extends React.Component {
                         </Text>
                         <Grid style={{ borderTopWidth: 1, borderTopColor: '#cfd2e3', borderTopLeftRadius: 5, borderTopRightRadius: 5, paddingTop: 4, alignItems: 'center' }}>
                             <Row style={{ flex: 1, width: "70%", justifyContent: 'space-between' }}>
-                                <View style={styles.row}>
-                                    <FontAwesomeIcon style={styles.icon} icon={faUsers} />
-                                    <Text style={styles.iconInfo}>{this.state.attendees} attendees</Text>
-                                </View>
+                                <TouchableHighlight style={styles.row} onPress={() => this.setState({ showAttendees: !this.state.showAttendees })}>
+                                    <View style={styles.row}>
+                                        <FontAwesomeIcon style={styles.icon} icon={faUsers} />
+                                        <Text style={styles.iconInfo}>{this.state.attendees} attendees</Text>
+                                    </View>
+                                </TouchableHighlight>
                                 <View style={styles.row}>
                                     <FontAwesomeIcon style={styles.icon} icon={faDollarSign} />
                                     <Text style={styles.iconInfo}>${this.props.item.price}</Text>
@@ -107,6 +167,25 @@ class Event extends React.Component {
                             </Row>
                         </Grid>
                     </View>
+
+                    {this.state.showAttendees &&
+                        <View style={styles.card}>
+                            <Text style={styles.attendeesHeading}>Attendees</Text>
+                            <FlatList
+                                data={this.state.attendeesArr}
+                                extraData={this.state}
+                                renderItem={({ item }) => {
+                                    return (
+                                        <View styles={styles.attendeesList}>
+                                            <Text>{item.name}</Text>
+                                        </View>
+                                    );
+                                }}
+                                keyExtractor={item => item.userId}
+                            >
+                            </FlatList>
+                        </View>
+                    }
 
                     <Text style={[styles.subheading, styles.locationHeading]}>location:</Text>
                     <View style={[styles.card, styles.locationCard]}>
@@ -151,6 +230,10 @@ const styles = new StyleSheet.create({
         width: screenWidth * .8,
         padding: 10,
         marginTop: 5,
+    },
+    attendeesHeading: {
+        fontSize: 20,
+        marginBottom: 5
     },
     title: {
         marginTop: screenHeight / 64,
