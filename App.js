@@ -22,6 +22,7 @@ import { Scene, Router, Stack } from 'react-native-router-flux';
 import Home from './src/components/Home';
 import Event from './src/components/Event';
 import Email from './src/components/Email';
+import SignUp from './src/components/SignUp';
 import Login from './src/components/Login';
 
 export default class App extends React.Component {
@@ -48,6 +49,7 @@ export default class App extends React.Component {
       <Router>
         <Stack key="root" hideNavBar="true" duration={0}>
           <Scene key="email" component={Email} />
+          <Scene key="signup" component={SignUp} />
           <Scene key="login" component={Login} />
           <Scene key="home" component={Home} />
           <Scene key="event" component={Event} />

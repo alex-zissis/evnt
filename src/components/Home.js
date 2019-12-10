@@ -144,9 +144,9 @@ class Home extends Component {
                             <View style={styles.slide}>
                                 {this.state.featured_evnts[0] &&
                                     <TouchableHighlight style={styles.eventCardWrapper} onPress={() => {
-                                        Actions.event({ item: this.state.featured_evnts[0], headers: this.state.headers });
+                                        Actions.event({ item: this.state.featured_evnts[0], user: this.state.user, headers: this.state.headers });
                                     }}>
-                                        <EventCard title={this.state.featured_evnts[0].title} price={this.state.featured_evnts[0].price} location={this.state.featured_evnts[0].location} coverPhoto={this.state.featured_evnts[0].coverPhoto} date={this.state.featured_evnts[0].date} type={this.state.featured_evnts[0].type} attendees={this.state.featured_evnts[0].attendees} />
+                                        <EventCard title={this.state.featured_evnts[0].title} price={this.state.featured_evnts[0].price} location={this.state.featured_evnts[0].location} coverPhoto={this.state.featured_evnts[0].coverPhoto} date={this.state.featured_evnts[0].date} type={this.state.featured_evnts[0].type} attendees={Object.keys(this.state.featured_evnts[0].attendees).length} />
                                     </TouchableHighlight>
                                 }
                             </View>
@@ -154,9 +154,9 @@ class Home extends Component {
                                 {this.state.featured_evnts[1] &&
 
                                     <TouchableHighlight style={styles.eventCardWrapper} onPress={() => {
-                                        Actions.event({ item: this.state.featured_evnts[1], headers: this.state.headers });
+                                        Actions.event({ item: this.state.featured_evnts[1], user: this.state.user, headers: this.state.headers });
                                     }}>
-                                        <EventCard title={this.state.featured_evnts[1].title} price={this.state.featured_evnts[1].price} location={this.state.featured_evnts[1].location} coverPhoto={this.state.featured_evnts[1].coverPhoto} date={this.state.featured_evnts[1].date} type={this.state.featured_evnts[1].type} attendees={this.state.featured_evnts[1].attendees} />
+                                        <EventCard title={this.state.featured_evnts[1].title} price={this.state.featured_evnts[1].price} location={this.state.featured_evnts[1].location} coverPhoto={this.state.featured_evnts[1].coverPhoto} date={this.state.featured_evnts[1].date} type={this.state.featured_evnts[1].type} attendees={Object.keys(this.state.featured_evnts[1].attendees).length} />
                                     </TouchableHighlight>
                                 }
                             </View>

@@ -30,6 +30,7 @@ class Email extends React.Component {
     }
 
     next = () => {
+        const email = this.state.email;
         if (this.state.validEmail) {
             console.log(this.state.email)
             this.ref.child('users').orderByChild('email').equalTo(this.state.email).on("value", function (snapshot) {
@@ -45,6 +46,7 @@ class Email extends React.Component {
                     })
                 } else {
                     console.log('asdas');
+                    Actions.signup({ email: email });
                 }
                 // snapshot.forEach(function (data) {
                 //     console.log(data.key);
