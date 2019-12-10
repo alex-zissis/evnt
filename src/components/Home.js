@@ -11,6 +11,8 @@ import {
     Dimensions,
     TouchableWithoutFeedback
 } from 'react-native';
+import firebase from 'react-native-firebase';
+const ref = firebase.app('evnt').database().ref();
 
 
 import Swiper from 'react-native-swiper';
@@ -149,7 +151,9 @@ class Home extends Component {
     state = {
         email: '',
         validEmail: false,
+        user: this.props.user,
         evnts: [],
+        data: [],
         types: ['club', 'sport', 'music', 'other'],
         headers: this.props.headers ? this.props.headers : true
     }
@@ -169,12 +173,24 @@ class Home extends Component {
         this.featureRef = ref;
     }
 
-    componentDidMount() {
-        this.filterTypes();
+    componentWillMount() {
+        ref.child('events').orderByKey().on("value", (snapshot) => {
+            if (snapshot.val() !== null) {
+                const obj = snapshot.val();
+                const events = Object.keys(obj).map(i => {
+                    const event = obj[i];
+                    event.id = i;
+                    return event;
+                });
+                this.data = events;
+                this.filterTypes();
+            }
+        })
     }
 
+
     filterTypes() {
-        let arr = DATA.slice();
+        let arr = this.data.slice();
         arr = arr.filter(evnt => this.state.types.includes(evnt.type));
         this.setState({
             evnts: arr,

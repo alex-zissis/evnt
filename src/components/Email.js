@@ -10,6 +10,7 @@ import {
     TouchableHighlight,
     Dimensions
 } from 'react-native';
+import firebase from 'react-native-firebase';
 import { Actions } from 'react-native-router-flux';
 
 const screenHeight = Dimensions.get('window').height;
@@ -20,6 +21,36 @@ class Email extends React.Component {
     state = {
         email: '',
         validEmail: false
+    }
+    ref;
+
+    componentDidMount() {
+        this.ref = firebase.app('evnt').database().ref();
+    }
+
+    next = () => {
+        if (this.state.validEmail) {
+            console.log(this.state.email)
+            this.ref.child('users').orderByChild('email').equalTo(this.state.email).on("value", function (snapshot) {
+                if (snapshot.val() !== null) {
+                    const object = snapshot.val();
+                    const userId = Object.keys(object)[0];
+                    console.log(userId);
+                    Actions.login({
+                        userId: userId,
+                        email: object[userId].email,
+                        firstName: object[userId].firstName,
+                        lastName: object[userId].lastName,
+                    })
+                } else {
+                    console.log('asdas');
+                }
+                // snapshot.forEach(function (data) {
+                //     console.log(data.key);
+                // });
+            }, err => console.log(err));
+            // Actions.login({ email: this.state.email, firstName: "Alex" });
+        }
     }
 
     render() {
@@ -46,11 +77,7 @@ class Email extends React.Component {
 
                     <TouchableHighlight
                         style={this.state.validEmail ? { opacity: 1 } : { opacity: .4 }}
-                        onPress={() => {
-                            if (this.state.validEmail) {
-                                Actions.login({ email: this.state.email, firstName: "Alex" });
-                            }
-                        }}
+                        onPress={this.next}
                     >
                         <Text style={styles.button}>next</Text>
                     </TouchableHighlight>
