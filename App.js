@@ -45,6 +45,7 @@ export default class App extends React.Component {
   }
 
   render() {
+    StatusBar.setBarStyle('dark-content', true);
     return (
       <Router>
         <Stack key="root" hideNavBar="true" duration={0}>

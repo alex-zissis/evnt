@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         width: screenWidth * .8,
         textAlign: 'center',
+        color: 'black',
         borderBottomWidth: 2,
         borderBottomColor: "#d3d3d3",
     },
