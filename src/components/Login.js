@@ -6,9 +6,12 @@ import {
     Text,
     TextInput,
     TouchableHighlight,
-    Dimensions
+    Dimensions,
+    TouchableWithoutFeedback
 } from 'react-native';
 import firebase from 'react-native-firebase';
+
+import commonStyles, { colors } from '../styles/common';
 
 import { PulseIndicator } from 'react-native-indicators';
 import { Actions } from 'react-native-router-flux';
@@ -97,7 +100,7 @@ class Login extends React.Component {
                             secureTextEntry={true}
                         ></TextInput>
 
-                        <TouchableHighlight
+                        <TouchableWithoutFeedback
                             style={this.state.password.length > 3 ? { opacity: 1 } : { opacity: .4 }}
                             onPress={() => {
                                 if (this.state.password.length > 3) {
@@ -105,8 +108,10 @@ class Login extends React.Component {
                                 }
                             }}
                         >
-                            <Text style={styles.button}>login</Text>
-                        </TouchableHighlight>
+                            <View style={[commonStyles.button, styles.nextButton]}>
+                                <Text>login</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
 
                         {this.state.password.length <= 3 && this.state.password.length > 0 &&
                             <Text style={styles.errorText}>
