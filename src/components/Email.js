@@ -8,14 +8,18 @@ import {
     StatusBar,
     TextInput,
     TouchableHighlight,
-    Dimensions
+    Dimensions,
+    TouchableWithoutFeedback,
+    KeyboardAvoidingView
 } from 'react-native';
+
+import commonStyles, { colors } from '../styles/common';
+
 import firebase from 'react-native-firebase';
 import { Actions } from 'react-native-router-flux';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-const highlight = 'orange';
 
 class Email extends React.Component {
     state = {
@@ -48,72 +52,71 @@ class Email extends React.Component {
                     console.log('asdas');
                     Actions.signup({ email: email });
                 }
-                // snapshot.forEach(function (data) {
-                //     console.log(data.key);
-                // });
             }, err => console.log(err));
-            // Actions.login({ email: this.state.email, firstName: "Alex" });
         }
     }
 
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <View>
-                    <Text style={styles.title}>
-                        enter your <Text style={{ color: highlight }}>email</Text>
-                    </Text>
-                </View>
-
-                <View style={[styles.body, { marginTop: screenHeight / 16 }]}>
-                    <TextInput
-                        style={[styles.input, { borderBottomColor: this.state.validEmail ? '#5cb85c' : '#d9534f' }]}
-                        onChangeText={(email) => this.validateEmail({ email })}
-                        value={this.state.email}
-                        autoCompleteType='email'
-                        autoFocus={true}
-                        keyboardType='email-address'
-                        textContentType='emailAddress'
-                        autoCapitalize='none'
-                        placeholder='user@example.com'
-                    ></TextInput>
-
-                    <TouchableHighlight
-                        style={this.state.validEmail ? { opacity: 1 } : { opacity: .4 }}
-                        onPress={this.next}
-                    >
-                        <Text style={styles.button}>next</Text>
-                    </TouchableHighlight>
-
-                    {this.state.email.length > 3 && !this.state.validEmail &&
-                        <Text style={styles.errorText}>
-                            enter a valid email address
+                <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={-250}>
+                    <View style={{ flex: 16 }}>
+                        <Text style={styles.title}>
+                            enter your <Text style={{ color: colors.highlight }}>email</Text>
                         </Text>
-                    }
-                </View>
+                    </View>
+
+                    <View style={styles.body}>
+                        <TextInput
+                            style={[styles.input, { borderBottomColor: this.state.validEmail ? '#5cb85c' : '#d9534f' }]}
+                            onChangeText={(email) => this.validateEmail({ email })}
+                            value={this.state.email}
+                            autoCompleteType='email'
+                            keyboardType='email-address'
+                            textContentType='emailAddress'
+                            autoCapitalize='none'
+                            autoFocus={true}
+                            placeholder='user@example.com'
+                            placeholderTextColor={colors.placeholderText}
+                        ></TextInput>
+
+                        <TouchableWithoutFeedback
+                            //style={[this.state.validEmail ? { opacity: 1 } : { opacity: .4 }]}
+                            onPress={this.next}
+                        >
+                            <View style={[commonStyles.button, styles.nextButton]}>
+                                <Text>next</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+
+                        {this.state.email.length > 3 && !this.state.validEmail &&
+                            <Text style={styles.errorText}>
+                                enter a valid email address
+                        </Text>
+                        }
+                    </View>
+                </KeyboardAvoidingView>
+
             </SafeAreaView >
         )
     }
 
     validateEmail(email) {
+        email.email = email.email.trim();
         this.setState(email);
-        let regex = /[^@]+@[^\.]+\..+/g
+        const regex = /[^@]+@[^\.]+\..+/g
 
-        if (regex.test(email.email)) {
-            this.setState({ 'validEmail': true });
-        } else {
-            this.setState({ 'validEmail': false });
-        }
+        this.setState({ 'validEmail': regex.test(email.email) });
     }
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f1f1f1'
+        backgroundColor: colors.backgroundColor
     },
     body: {
-        flex: 1,
+        flex: 24,
         alignItems: 'center'
     },
     title: {
@@ -132,27 +135,19 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderBottomColor: "#d3d3d3",
     },
-    button: {
-        display: 'flex',
-        marginTop: screenHeight / 24,
-        padding: 10,
-        fontSize: 20,
-        backgroundColor: highlight,
-        color: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10,
-        overflow: 'hidden',
-    },
     instruction: {
         textAlign: 'center',
         marginTop: screenHeight / 32,
         fontSize: 20,
-        color: '#8c92ac',
+        color: colors.tertiaryColor,
     },
     errorText: {
         marginTop: screenHeight / 32,
-        color: '#d9534f',
+        color: colors.errorText,
+    },
+    nextButton: {
+        fontSize: 18,
+        marginTop: screenHeight / 32
     }
 });
 
