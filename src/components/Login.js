@@ -42,9 +42,6 @@ class Login extends React.Component {
 
     componentDidMount() {
         const parent = this;
-        // setTimeout(() => {
-        //     parent.setState({ 'spinnerVisible': false })
-        // }, 2000);
         parent.setState({ 'spinnerVisible': false })
         this.unsubscriber = firebase.app('evnt').auth().onAuthStateChanged((user) => {
             this.setState({ user });
@@ -78,52 +75,54 @@ class Login extends React.Component {
                     </View>
                 )}
                 <SafeAreaView style={styles.container}>
-                    <View>
-                        <Text style={styles.title}>
-                            welcome back <Text style={{ color: highlight }}>{this.props.firstName.toLowerCase()}</Text>
-                        </Text>
-                        <Text style={styles.instruction}>
-                            enter your password
+                    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={-250}>
+                        <View style={{ flex: 16 }}>
+                            <Text style={styles.title}>
+                                welcome back <Text style={{ color: highlight }}>{this.props.firstName.toLowerCase()}</Text>
                             </Text>
-                    </View>
-
-                    <View style={[styles.body, { marginTop: screenHeight / 32 }]}>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(password) => this.setState({ 'password': password })}
-                            value={this.state.password}
-                            autoCompleteType='password'
-                            autoFocus={true}
-                            textContentType='password'
-                            autoCapitalize='none'
-                            placeholder='password'
-                            secureTextEntry={true}
-                        ></TextInput>
-
-                        <TouchableWithoutFeedback
-                            style={this.state.password.length > 3 ? { opacity: 1 } : { opacity: .4 }}
-                            onPress={() => {
-                                if (this.state.password.length > 3) {
-                                    this.login();
-                                }
-                            }}
-                        >
-                            <View style={[commonStyles.button, styles.nextButton]}>
-                                <Text>login</Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-
-                        {this.state.password.length <= 3 && this.state.password.length > 0 &&
-                            <Text style={styles.errorText}>
-                                enter a valid password
+                            <Text style={styles.instruction}>
+                                enter your password
                             </Text>
-                        }
-                        {!this.state.valid &&
-                            <Text style={styles.errorText}>
-                                invalid password
+                        </View>
+
+                        <View style={styles.body}>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={(password) => this.setState({ 'password': password })}
+                                value={this.state.password}
+                                autoCompleteType='password'
+                                autoFocus={true}
+                                textContentType='password'
+                                autoCapitalize='none'
+                                placeholder='password'
+                                secureTextEntry={true}
+                            ></TextInput>
+
+                            <TouchableWithoutFeedback
+                                style={this.state.password.length > 3 ? { opacity: 1 } : { opacity: .4 }}
+                                onPress={() => {
+                                    if (this.state.password.length > 3) {
+                                        this.login();
+                                    }
+                                }}
+                            >
+                                <View style={[commonStyles.button, styles.nextButton]}>
+                                    <Text>login</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+
+                            {this.state.password.length <= 3 && this.state.password.length > 0 &&
+                                <Text style={styles.errorText}>
+                                    enter a valid password
                             </Text>
-                        }
-                    </View>
+                            }
+                            {!this.state.valid &&
+                                <Text style={styles.errorText}>
+                                    invalid password
+                            </Text>
+                            }
+                        </View>
+                    </KeyboardAvoidingView>
                 </SafeAreaView >
             </View >
         )

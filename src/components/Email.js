@@ -33,7 +33,7 @@ class Email extends React.Component {
         console.log(firebase.app('evnt').auth().currentUser);
     }
 
-    next = () => {
+    next() {
         const email = this.state.email;
         if (this.state.validEmail) {
             console.log(this.state.email)
@@ -102,6 +102,7 @@ class Email extends React.Component {
     }
 
     validateEmail(email) {
+        console.log(email);
         email.email = email.email.trim();
         this.setState(email);
         const regex = /[^@]+@[^\.]+\..+/g
